@@ -1,0 +1,2218 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KPI Logistics - Quản lý vận tải đa phương thức</title>
+
+<style>
+:root {
+    --navy: #102b4e;
+    --blue: #2563a6;
+    --gold: #e5a52b;
+    --bg: #f3f6fa;
+    --text: #26384d;
+    --muted: #7b8999;
+    --green: #168653;
+    --yellow: #c48617;
+    --red: #d44949;
+    --border: #e5eaf0;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+}
+
+button, input, select { font: inherit; }
+
+button { cursor: pointer; }
+
+.page {
+    max-width: 1500px;
+    margin: auto;
+    padding: 24px;
+}
+
+.hero {
+    background: linear-gradient(120deg, #102b4e, #1e507e);
+    color: white;
+    border-radius: 15px;
+    padding: 28px 32px;
+    margin-bottom: 22px;
+    border-bottom: 5px solid var(--gold);
+}
+
+.hero-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.brand {
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: #f4c96f;
+}
+
+.local-tag {
+    background: rgba(255,255,255,.13);
+    border: 1px solid rgba(255,255,255,.25);
+    padding: 7px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+}
+
+.hero h1 {
+    font-size: clamp(22px, 3vw, 31px);
+    line-height: 1.3;
+    margin: 22px 0 9px;
+}
+
+.hero p {
+    color: #d7e3ef;
+    margin: 0;
+    line-height: 1.6;
+}
+
+.nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin: 20px 0;
+    background: white;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+}
+
+.nav a {
+    color: var(--navy);
+    text-decoration: none;
+    padding: 10px 13px;
+    border-radius: 7px;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.nav a:hover { background: #eaf1f8; }
+
+.section {
+    background: white;
+    padding: 24px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 22px;
+    scroll-margin-top: 15px;
+}
+
+.section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.eyebrow {
+    color: #bd851e;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1.6px;
+}
+
+h2 {
+    color: var(--navy);
+    font-size: 21px;
+    margin: 7px 0;
+}
+
+.section-head p {
+    color: var(--muted);
+    margin: 0;
+    line-height: 1.5;
+    font-size: 12px;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 19px;
+    background: #fff;
+}
+
+.card-label {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.card-value {
+    font-size: 26px;
+    font-weight: bold;
+    color: var(--navy);
+    margin: 12px 0 5px;
+    overflow-wrap: anywhere;
+}
+
+.card-note {
+    color: #9aa5b2;
+    font-size: 11px;
+}
+
+.card-blue { border-top: 4px solid #3978b8; }
+.card-gold { border-top: 4px solid var(--gold); }
+.card-green { border-top: 4px solid #269b6a; }
+.card-purple { border-top: 4px solid #8a69c5; }
+
+.grid-two {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.subpanel {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    min-width: 0;
+}
+
+.subpanel h3 {
+    color: var(--navy);
+    margin: 0 0 7px;
+    font-size: 15px;
+}
+
+.subpanel > p {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.5;
+    margin: 0 0 17px;
+}
+
+.route-step {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding: 8px 0;
+}
+
+.route-letter {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #eaf1f8;
+    color: var(--blue);
+    display: grid;
+    place-items: center;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.route-step strong {
+    display: block;
+    font-size: 12px;
+}
+
+.route-step small {
+    display: block;
+    color: var(--muted);
+    margin-top: 4px;
+}
+
+.route-connector {
+    margin-left: 14px;
+    padding: 3px 0 3px 28px;
+    border-left: 2px dashed #cbd6e2;
+    color: #8b98a7;
+    font-size: 10px;
+}
+
+.form-section-title {
+    font-size: 14px;
+    color: var(--blue);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 11px;
+    margin: 23px 0 16px;
+}
+
+.form-section-title:first-child { margin-top: 0; }
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.field label {
+    display: block;
+    color: #53657a;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 7px;
+}
+
+.field input {
+    width: 100%;
+    min-width: 0;
+    padding: 11px 12px;
+    border: 1px solid #dce3eb;
+    border-radius: 7px;
+    background: #fbfcfe;
+    color: var(--text);
+    outline: none;
+}
+
+.field input:focus {
+    border-color: #3978b8;
+    box-shadow: 0 0 0 3px rgba(57,120,184,.1);
+}
+
+.field select {
+    width: 100%;
+    min-width: 0;
+    padding: 11px 12px;
+    border: 1px solid #dce3eb;
+    border-radius: 7px;
+    background: #fbfcfe;
+    color: var(--text);
+    outline: none;
+}
+
+.field select:focus {
+    border-color: #3978b8;
+    box-shadow: 0 0 0 3px rgba(57,120,184,.1);
+}
+
+.field input[list] {
+    background: #fbfcfe;
+}
+.field small {
+    display: block;
+    color: #96a1ae;
+    font-size: 10px;
+    margin-top: 5px;
+    line-height: 1.4;
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+.btn {
+    border: 0;
+    border-radius: 7px;
+    padding: 12px 17px;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.btn-primary {
+    background: var(--navy);
+    color: white;
+}
+
+.btn-primary:hover { background: #1d4776; }
+
+.btn-secondary {
+    background: #eaf0f6;
+    color: var(--navy);
+}
+
+.btn-gold {
+    background: #fff1d5;
+    color: #875d0c;
+}
+
+.btn-danger {
+    background: #fdeaea;
+    color: #b52f2f;
+}
+
+.notice {
+    padding: 13px 15px;
+    background: #f1f6fb;
+    border-left: 3px solid #3978b8;
+    border-radius: 6px;
+    color: #63758a;
+    font-size: 12px;
+    line-height: 1.6;
+    margin-top: 18px;
+}
+
+.message {
+    display: none;
+    padding: 13px 15px;
+    margin-bottom: 15px;
+    border-radius: 7px;
+    font-size: 12px;
+}
+
+.message.success {
+    display: block;
+    color: #176b43;
+    background: #e7f6ed;
+}
+
+.message.error {
+    display: block;
+    color: #a62c2c;
+    background: #fdeaea;
+}
+
+.table-wrap { overflow-x: auto; }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 700px;
+    font-size: 12px;
+}
+
+th {
+    padding: 13px 11px;
+    text-align: left;
+    color: white;
+    background: var(--navy);
+    white-space: nowrap;
+}
+
+td {
+    padding: 12px 11px;
+    border-bottom: 1px solid var(--border);
+    color: #526479;
+}
+
+tbody tr:hover { background: #f7f9fc; }
+
+.status {
+    display: inline-block;
+    padding: 6px 9px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.status.good { background: #e4f5eb; color: var(--green); }
+.status.warning { background: #fff3dc; color: var(--yellow); }
+.status.bad { background: #fde8e8; color: var(--red); }
+.status.missing { background: #edf0f4; color: #68788c; }
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 19px;
+}
+
+.summary-box {
+    background: #f7f9fc;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+}
+
+.summary-box strong {
+    display: block;
+    font-size: 25px;
+    margin-bottom: 5px;
+}
+
+.summary-box span {
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.green-text { color: var(--green); }
+.yellow-text { color: var(--yellow); }
+.red-text { color: var(--red); }
+.gray-text { color: #8995a4; }
+
+.chart-list {
+    display: grid;
+    gap: 15px;
+}
+
+.chart-row {
+    display: grid;
+    grid-template-columns: minmax(130px, 190px) 1fr 95px;
+    align-items: center;
+    gap: 12px;
+}
+
+.chart-name {
+    font-size: 11px;
+    color: #53657a;
+}
+
+.track {
+    height: 12px;
+    background: #edf1f5;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.bar {
+    height: 100%;
+    border-radius: 20px;
+}
+
+.bar.good { background: #249768; }
+.bar.warning { background: #e5a52b; }
+.bar.bad { background: #d44949; }
+.bar.missing { background: #aeb8c4; }
+
+.chart-value {
+    text-align: right;
+    font-size: 11px;
+    color: #53657a;
+}
+
+.analysis-list {
+    display: grid;
+    gap: 10px;
+}
+
+.analysis-item {
+    padding: 13px;
+    border-radius: 8px;
+    background: #f7f9fc;
+    border-left: 3px solid #d44949;
+    line-height: 1.5;
+}
+
+.analysis-item.warning-item { border-left-color: #e5a52b; }
+
+.analysis-item strong {
+    display: block;
+    color: var(--navy);
+    margin-bottom: 4px;
+}
+
+.analysis-item span {
+    color: #68788c;
+    font-size: 12px;
+}
+
+.empty {
+    text-align: center;
+    color: #8b98a7;
+    padding: 28px 12px;
+    background: #f7f9fc;
+    border-radius: 8px;
+    font-size: 12px;
+}
+
+.history-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.small-btn {
+    border: 0;
+    border-radius: 5px;
+    padding: 7px 9px;
+    font-size: 10px;
+    font-weight: bold;
+    background: #eaf0f6;
+    color: var(--navy);
+}
+
+.small-btn.delete {
+    background: #fdeaea;
+    color: #b52f2f;
+}
+
+footer {
+    text-align: center;
+    color: #8794a3;
+    padding: 20px 10px 35px;
+    font-size: 11px;
+    line-height: 1.8;
+}
+
+@media(max-width: 950px) {
+    .cards { grid-template-columns: repeat(2, 1fr); }
+    .form-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media(max-width: 650px) {
+    .page { padding: 12px; }
+    .hero { padding: 22px; }
+    .section { padding: 17px; }
+    .grid-two { grid-template-columns: 1fr; }
+    .form-grid { grid-template-columns: 1fr; }
+    .summary-grid { grid-template-columns: repeat(2, 1fr); }
+    .chart-row { grid-template-columns: 110px 1fr 70px; gap: 7px; }
+    .section-head { align-items: flex-start; }
+}
+
+@media(max-width: 390px) {
+    .cards { grid-template-columns: 1fr; }
+    .hero-top { align-items: flex-start; flex-direction: column; }
+}
+</style>
+</head>
+
+<body>
+<div class="page">
+
+    <header class="hero">
+        <div class="hero-top">
+            <div class="brand">KPI LOGISTICS MANAGEMENT</div>
+            <div class="local-tag">● HỆ THỐNG LOCALHOST</div>
+        </div>
+        <h1>Hệ thống đánh giá KPI vận tải đa phương thức</h1>
+        <p>Theo dõi, đo lường và phân tích hiệu quả vận chuyển hàng hóa</p>
+    </header>
+
+    <nav class="nav">
+        <a href="#overview">01. Tổng quan</a>
+        <a href="#route">02. Tuyến vận chuyển</a>
+        <a href="#input">03. Nhập dữ liệu</a>
+        <a href="#kpi">04. Bảng KPI</a>
+        <a href="#analysis">05. Phân tích</a>
+        <a href="#history">06. Lịch sử</a>
+    </nav>
+
+    <!-- TỔNG QUAN -->
+    <section class="section" id="overview">
+        <div class="section-head">
+            <div>
+                <span class="eyebrow">DASHBOARD OVERVIEW</span>
+                <h2>Tổng quan hoạt động vận chuyển</h2>
+                <p>Số liệu được cập nhật theo dữ liệu lô hàng đang chọn.</p>
+            </div>
+        </div>
+
+        <div class="cards">
+            <div class="card card-blue">
+                <div class="card-label">Tổng lô hàng đã lưu</div>
+                <div class="card-value" id="totalShipments">0</div>
+                <div class="card-note">Lô hàng trong trình duyệt này</div>
+            </div>
+            <div class="card card-gold">
+                <div class="card-label">Chi phí lô hàng đang xem</div>
+                <div class="card-value" id="dashboardTotalCost">--</div>
+                <div class="card-note">USD</div>
+            </div>
+            <div class="card card-green">
+                <div class="card-label">Số container</div>
+                <div class="card-value" id="totalContainers">--</div>
+                <div class="card-note">Container của lô hàng đang xem</div>
+            </div>
+            <div class="card card-purple">
+                <div class="card-label">Số chỉ số KPI</div>
+                <div class="card-value">11</div>
+                <div class="card-note">Chỉ số được theo dõi</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TUYẾN VẬN CHUYỂN -->
+<section class="section" id="route">
+    <div class="section-head">
+        <div>
+            <span class="eyebrow">MULTIMODAL TRANSPORT ROUTE</span>
+            <h2>Thông tin tuyến vận chuyển</h2>
+            <p id="routeSubtitle">Thông tin được cập nhật theo lô hàng đang nhập hoặc đang xem.</p>
+        </div>
+    </div>
+
+    <div class="grid-two">
+        <div class="subpanel">
+            <h3>Hành trình vận chuyển</h3>
+            <p id="routeMode">Chưa xác định phương thức vận tải.</p>
+            <div id="routeSteps">
+                <div class="empty">Chưa có thông tin tuyến vận chuyển.</div>
+            </div>
+        </div>
+
+        <div class="subpanel">
+            <h3>Thông tin đơn vị vận chuyển</h3>
+            <p>Các đơn vị tham gia phương án vận tải.</p>
+
+            <div id="routeCarriers">
+                <div class="empty">Chưa có thông tin đơn vị vận chuyển.</div>
+            </div>
+
+            <div class="notice" id="routeCargoInfo">
+                Chưa có thông tin lô hàng.
+            </div>
+        </div>
+    </div>
+</section>
+
+    <!-- NHẬP DỮ LIỆU -->
+    <section class="section" id="input">
+        <div class="section-head">
+            <div>
+                <span class="eyebrow">SHIPMENT DATA ENTRY</span>
+                <h2>Nhập dữ liệu lô hàng</h2>
+                <p>Nhập dữ liệu thực tế hoặc dữ liệu mô phỏng để hệ thống tính KPI.</p>
+            </div>
+        </div>
+
+        <div id="message" class="message"></div>
+
+        <form id="shipmentForm">
+            <h3 class="form-section-title">01. Thông tin chung</h3>
+
+            <div class="form-grid">
+                <div class="field">
+                    <label for="shipmentCode">Mã lô hàng *</label>
+                    <input id="shipmentCode" required placeholder="Ví dụ: DHL-SG-001">
+                </div>
+
+                <div class="field">
+                    <label for="productName">Tên hàng hóa *</label>
+                    <input id="productName" required value="Bosch Series 2 HBF134EB0K">
+                </div>
+
+                <div class="field">
+                    <label for="quantity">Số lượng hàng hóa (sản phẩm)</label>
+                    <input id="quantity" type="number" min="1" value="324" required>
+                </div>
+
+                <div class="field">
+                    <label for="containers">Số lượng container</label>
+                    <input id="containers" type="number" min="1" value="2" required>
+                </div>
+
+                <div class="field">
+                    <label for="totalCost">Tổng chi phí vận chuyển (USD)</label>
+                    <input id="totalCost" type="number" min="0" step="0.01" placeholder="2490.71">
+                    <small>Tổng chi phí toàn tuyến của lô hàng.</small>
+                </div>
+
+                <div class="field">
+                    <label for="leadTime">Lead Time (giờ)</label>
+                    <input id="leadTime" type="number" min="0" step="0.01" placeholder="151">
+                </div>
+            </div>
+
+            <h3 class="form-section-title">02. Thông tin xuất nhập khẩu và tuyến vận chuyển</h3>
+
+<div class="form-grid">
+    <div class="field">
+    <label for="exportCountry">Quốc gia xuất khẩu</label>
+    <select id="exportCountry">
+        <option value="">-- Chọn quốc gia --</option>
+    </select>
+</div>
+
+<div class="field">
+    <label for="importCountry">Quốc gia nhập khẩu</label>
+    <select id="importCountry">
+        <option value="">-- Chọn quốc gia --</option>
+    </select>
+</div>
+
+    <div class="field">
+        <label for="incoterm">Điều kiện Incoterms 2020</label>
+        <select id="incoterm">
+            <option value="">-- Chọn Incoterms --</option>
+            <option>EXW</option>
+            <option>FCA</option>
+            <option>FAS</option>
+            <option>FOB</option>
+            <option>CFR</option>
+            <option>CIF</option>
+            <option>CPT</option>
+            <option>CIP</option>
+            <option>DAP</option>
+            <option>DPU</option>
+            <option>DDP</option>
+        </select>
+    </div>
+
+    <div class="field">
+    <label for="portOfLoading">Cảng xuất (POL)</label>
+    <select id="portOfLoading">
+        <option value="">-- Chọn cảng xuất --</option>
+    </select>
+</div>
+
+<div class="field">
+    <label for="portOfDischarge">Cảng nhập (POD)</label>
+    <select id="portOfDischarge">
+        <option value="">-- Chọn cảng nhập --</option>
+    </select>
+</div>
+
+    <div class="field">
+        <label for="finalDeliveryLocation">Địa điểm giao hàng cuối cùng</label>
+        <input id="finalDeliveryLocation"
+               placeholder="Ví dụ: Kho người mua, Singapore">
+    </div>
+</div>
+
+<datalist id="worldPorts">
+    <option value="Cảng Cát Lái - Ho Chi Minh City, Vietnam">
+    <option value="Cảng Hải Phòng - Hai Phong, Vietnam">
+    <option value="Cảng Đà Nẵng - Da Nang, Vietnam">
+    <option value="Cảng Cái Mép - Thi Vai, Vietnam">
+    <option value="PSA Pasir Panjang - Singapore">
+    <option value="Tanjung Pelepas - Malaysia">
+    <option value="Port Klang - Malaysia">
+    <option value="Shanghai - China">
+    <option value="Ningbo-Zhoushan - China">
+    <option value="Yantian - Shenzhen, China">
+    <option value="Hong Kong - China">
+    <option value="Busan - South Korea">
+    <option value="Tokyo - Japan">
+    <option value="Yokohama - Japan">
+    <option value="Laem Chabang - Thailand">
+    <option value="Colombo - Sri Lanka">
+    <option value="Jebel Ali - UAE">
+    <option value="Rotterdam - Netherlands">
+    <option value="Antwerp-Bruges - Belgium">
+    <option value="Hamburg - Germany">
+    <option value="Los Angeles - USA">
+    <option value="Long Beach - USA">
+    <option value="New York and New Jersey - USA">
+    <option value="Sydney - Australia">
+    <option value="Melbourne - Australia">
+</datalist>
+
+<h3 class="form-section-title">03. Phương tiện và đơn vị vận chuyển</h3>
+
+<div class="form-grid">
+    <div class="field">
+    <label for="transportMode">Phương thức vận tải</label>
+    <select id="transportMode">
+        <option value="">-- Chọn phương thức vận tải --</option>
+
+        <optgroup label="Vận tải đơn phương thức">
+            <option>Đường bộ (Road)</option>
+            <option>Đường sắt (Rail)</option>
+            <option>Đường biển (Sea)</option>
+            <option>Đường thủy nội địa (Inland Waterway)</option>
+            <option>Đường hàng không (Air)</option>
+            <option>Đường ống (Pipeline)</option>
+        </optgroup>
+
+        <optgroup label="Vận tải kết hợp hai phương thức">
+            <option>Đường bộ + Đường biển</option>
+            <option>Đường bộ + Đường sắt</option>
+            <option>Đường bộ + Đường hàng không</option>
+            <option>Đường bộ + Đường thủy nội địa</option>
+            <option>Đường sắt + Đường biển</option>
+            <option>Đường sắt + Đường thủy nội địa</option>
+            <option>Đường sắt + Đường hàng không</option>
+            <option>Đường biển + Đường hàng không</option>
+            <option>Đường biển + Đường thủy nội địa</option>
+        </optgroup>
+
+        <optgroup label="Vận tải kết hợp nhiều phương thức">
+            <option>Đường bộ + Đường biển + Đường bộ</option>
+            <option>Đường bộ + Đường sắt + Đường biển</option>
+            <option>Đường bộ + Đường hàng không + Đường bộ</option>
+            <option>Đường sắt + Đường biển + Đường bộ</option>
+            <option>Đường bộ + Đường thủy nội địa + Đường biển</option>
+            <option>Đường bộ + Đường sắt + Đường hàng không</option>
+            <option>Đa phương thức kết hợp khác</option>
+        </optgroup>
+    </select>
+</div>
+
+    <div class="field">
+        <label for="freightForwarder">Đơn vị giao nhận / Forwarder</label>
+        <input id="freightForwarder"
+               placeholder="Ví dụ: DHL Global Forwarding">
+    </div>
+
+    <div class="field">
+        <label for="shippingLine">Hãng tàu / Shipping Line</label>
+        <input id="shippingLine" list="shippingLines"
+               placeholder="Nhập hoặc chọn hãng tàu">
+        <datalist id="shippingLines">
+            <option value="Ocean Network Express (ONE)">
+            <option value="Maersk">
+            <option value="MSC">
+            <option value="CMA CGM">
+            <option value="COSCO Shipping">
+            <option value="Evergreen">
+            <option value="Hapag-Lloyd">
+            <option value="Yang Ming">
+            <option value="HMM">
+            <option value="ZIM">
+        </datalist>
+    </div>
+
+    <div class="field">
+        <label for="roadCarrier">Đơn vị vận tải đường bộ</label>
+        <input id="roadCarrier"
+               placeholder="Ví dụ: Door to Door Việt">
+    </div>
+
+    <div class="field">
+        <label for="vesselName">Tên tàu</label>
+        <input id="vesselName" placeholder="Nhập tên tàu">
+    </div>
+
+    <div class="field">
+        <label for="voyageNumber">Số chuyến (Voyage)</label>
+        <input id="voyageNumber" placeholder="Ví dụ: 084S">
+    </div>
+
+    <div class="field">
+        <label for="containerType">Loại container</label>
+        <select id="containerType">
+            <option value="">-- Chọn loại container --</option>
+            <option>20GP</option>
+            <option>40GP</option>
+            <option>40HC</option>
+            <option>45HC</option>
+            <option>20RF</option>
+            <option>40RF</option>
+            <option>Khác</option>
+        </select>
+    </div>
+</div>
+
+<h3 class="form-section-title">04. Lịch trình khởi hành và đến</h3>
+
+<div class="form-grid">
+    <div class="field">
+        <label for="etd">ETD - Ngày khởi hành dự kiến</label>
+        <input id="etd" type="datetime-local">
+    </div>
+
+    <div class="field">
+        <label for="eta">ETA - Ngày đến dự kiến</label>
+        <input id="eta" type="datetime-local">
+    </div>
+
+    <div class="field">
+        <label for="actualDeparture">Ngày khởi hành thực tế</label>
+        <input id="actualDeparture" type="datetime-local">
+    </div>
+
+    <div class="field">
+        <label for="actualArrival">Ngày đến thực tế</label>
+        <input id="actualArrival" type="datetime-local">
+    </div>
+</div>
+            <h3 class="form-section-title">05. Thời gian vận chuyển và lịch trình</h3>
+
+            <div class="form-grid">
+                <div class="field">
+                    <label for="dwellTime">Dwell Time (giờ)</label>
+                    <input id="dwellTime" type="number" min="0" step="0.01" placeholder="27.5">
+                </div>
+
+                <div class="field">
+                    <label for="plannedDelivery">Thời gian giao hàng dự kiến</label>
+                    <input id="plannedDelivery" type="datetime-local">
+                </div>
+
+                <div class="field">
+                    <label for="actualDelivery">Thời gian giao hàng thực tế</label>
+                    <input id="actualDelivery" type="datetime-local">
+                </div>
+
+                <div class="field">
+                    <label for="plannedMilestones">Tổng số mốc SLA</label>
+                    <input id="plannedMilestones" type="number" min="1" value="4">
+                </div>
+
+                <div class="field">
+                    <label for="ontimeMilestones">Số mốc đúng lịch</label>
+                    <input id="ontimeMilestones" type="number" min="0" value="3">
+                </div>
+
+                <div class="field">
+                    <label for="turnaroundTime">Container Turnaround (giờ)</label>
+                    <input id="turnaroundTime" type="number" min="0" step="0.01" placeholder="191">
+                </div>
+            </div>
+
+            <h3 class="form-section-title">06. Khai thác container, chất lượng và môi trường</h3>
+
+            <div class="form-grid">
+                <div class="field">
+                    <label for="cargoVolume">Thể tích hàng hóa (m³)</label>
+                    <input id="cargoVolume" type="number" min="0" step="0.0001" placeholder="98.88">
+                </div>
+
+                <div class="field">
+                    <label for="containerCapacity">Tổng sức chứa container (m³)</label>
+                    <input id="containerCapacity" type="number" min="0" step="0.01" placeholder="133.80">
+                </div>
+
+                <div class="field">
+                    <label for="damagedItems">Số sản phẩm hư hỏng</label>
+                    <input id="damagedItems" type="number" min="0" value="0">
+                </div>
+
+                <div class="field">
+                    <label for="dndCost">Chi phí D&D (USD)</label>
+                    <input id="dndCost" type="number" min="0" step="0.01" value="0">
+                    <small>Nếu báo cáo sử dụng VND, cần thống nhất đơn vị.</small>
+                </div>
+
+                <div class="field">
+                    <label for="co2Emissions">Phát thải CO₂ (kg CO₂e)</label>
+                    <input id="co2Emissions" type="number" min="0" step="0.01" placeholder="278.7">
+                </div>
+            </div>
+
+            <div class="notice">
+                Các trường chưa có dữ liệu có thể để trống. Hệ thống sẽ hiển thị
+                "Chưa có dữ liệu" thay vì tự xem dữ liệu trống là 0.
+                Dữ liệu được lưu trên trình duyệt bằng LocalStorage.
+            </div>
+
+            <div class="actions">
+                <button class="btn btn-primary" type="submit">LƯU LÔ HÀNG VÀ TÍNH KPI</button>
+                <button class="btn btn-gold" type="button" id="sampleButton">NẠP DỮ LIỆU MẪU</button>
+                <button class="btn btn-secondary" type="button" id="clearFormButton">LÀM TRỐNG BIỂU MẪU</button>
+            </div>
+        </form>
+    </section>
+
+    <!-- BẢNG KPI -->
+    <section class="section" id="kpi">
+        <div class="section-head">
+            <div>
+                <span class="eyebrow">KPI PERFORMANCE</span>
+                <h2>Bảng đánh giá 11 chỉ số KPI</h2>
+                <p id="selectedShipment">Chưa có lô hàng được chọn.</p>
+            </div>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Chỉ số KPI</th>
+                        <th>Giá trị thực tế</th>
+                        <th>Mục tiêu</th>
+                        <th>Đơn vị</th>
+                        <th>Đánh giá</th>
+                    </tr>
+                </thead>
+                <tbody id="kpiTable">
+                    <tr><td colspan="6">Chưa có dữ liệu. Hãy nhập lô hàng.</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="summary-grid">
+            <div class="summary-box">
+                <strong class="green-text" id="goodCount">0</strong>
+                <span>Đạt mục tiêu</span>
+            </div>
+            <div class="summary-box">
+                <strong class="yellow-text" id="warningCount">0</strong>
+                <span>Cần cải thiện</span>
+            </div>
+            <div class="summary-box">
+                <strong class="red-text" id="badCount">0</strong>
+                <span>Không đạt</span>
+            </div>
+            <div class="summary-box">
+                <strong class="gray-text" id="missingCount">11</strong>
+                <span>Chưa có dữ liệu</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- BIỂU ĐỒ -->
+    <section class="section" id="analysis">
+        <div class="section-head">
+            <div>
+                <span class="eyebrow">PERFORMANCE ANALYSIS</span>
+                <h2>Biểu đồ và phân tích KPI</h2>
+                <p>Trực quan hóa tình trạng hoàn thành các chỉ tiêu KPI.</p>
+            </div>
+        </div>
+
+        <div class="grid-two">
+            <div class="subpanel">
+                <h3>Biểu đồ trạng thái KPI</h3>
+                <p>Số lượng KPI theo từng mức đánh giá.</p>
+                <div id="statusChart" class="empty">Chưa có dữ liệu để hiển thị.</div>
+            </div>
+
+            <div class="subpanel">
+                <h3>Phân tích các chỉ số</h3>
+                <p>Đánh giá tình trạng các KPI theo mục tiêu.</p>
+                <div id="analysisList" class="empty">Chưa có dữ liệu để phân tích.</div>
+            </div>
+        </div>
+
+        <div class="subpanel" style="margin-top:18px">
+            <h3>So sánh giá trị thực tế và mục tiêu</h3>
+            <p>Biểu đồ tỷ lệ hoàn thành tương đối theo từng chỉ số. Giá trị được chuẩn hóa để dễ quan sát, không phải so sánh trực tiếp đơn vị đo.</p>
+            <div id="comparisonChart" class="empty">Chưa có dữ liệu.</div>
+        </div>
+    </section>
+
+    <!-- LỊCH SỬ -->
+    <section class="section" id="history">
+        <div class="section-head">
+            <div>
+                <span class="eyebrow">SHIPMENT HISTORY</span>
+                <h2>Lịch sử vận chuyển</h2>
+                <p>Chọn một lô hàng để xem lại kết quả KPI đã lưu.</p>
+            </div>
+            <button class="btn btn-danger" id="deleteAllButton" type="button">XÓA TOÀN BỘ</button>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Mã lô hàng</th>
+                        <th>Tên hàng hóa</th>
+<th>Tuyến vận chuyển</th>
+<th>Phương thức</th>
+<th>Hãng tàu</th>
+<th>Số lượng</th>
+<th>Container</th>
+<th>Chi phí (USD)</th>
+                        <th>Ngày lưu</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody id="historyTable">
+                    <tr><td colspan="11">Chưa có lô hàng nào được lưu.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <footer>
+        <strong>KPI LOGISTICS MANAGEMENT SYSTEM</strong><br>
+        Hệ thống đánh giá hiệu quả vận tải đa phương thức<br>
+        Dữ liệu được lưu cục bộ trên trình duyệt đang sử dụng.
+    </footer>
+
+</div>
+
+<script>
+"use strict";
+
+// =====================================
+// 1. CẤU HÌNH VÀ CÁC HÀM HỖ TRỢ
+// =====================================
+
+const STORAGE_KEY = "kpi_logistics_shipments_v1";
+
+const countries = [
+    "Afghanistan", "Albania", "Algeria", "Andorra", "Angola",
+    "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria",
+    "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados",
+    "Belarus", "Belgium", "Belize", "Benin", "Bhutan",
+    "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei",
+    "Bulgaria", "Burkina Faso", "Burundi", "Cabo Verde", "Cambodia",
+    "Cameroon", "Canada", "Central African Republic", "Chad", "Chile",
+    "China", "Colombia", "Comoros", "Congo", "Costa Rica",
+    "Côte d'Ivoire", "Croatia", "Cuba", "Cyprus", "Czechia",
+    "Democratic Republic of the Congo", "Denmark", "Djibouti", "Dominica",
+    "Dominican Republic", "Ecuador", "Egypt", "El Salvador",
+    "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia",
+    "Fiji", "Finland", "France", "Gabon", "Gambia",
+    "Georgia", "Germany", "Ghana", "Greece", "Grenada",
+    "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti",
+    "Honduras", "Hungary", "Iceland", "India", "Indonesia",
+    "Iran", "Iraq", "Ireland", "Israel", "Italy",
+    "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya",
+    "Kiribati", "Kuwait", "Kyrgyzstan", "Laos", "Latvia",
+    "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein",
+    "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia",
+    "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania",
+    "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco",
+    "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar",
+    "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand",
+    "Nicaragua", "Niger", "Nigeria", "North Korea", "North Macedonia",
+    "Norway", "Oman", "Pakistan", "Palau", "Panama",
+    "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland",
+    "Portugal", "Qatar", "Romania", "Russia", "Rwanda",
+    "Saint Kitts and Nevis", "Saint Lucia",
+    "Saint Vincent and the Grenadines", "Samoa", "San Marino",
+    "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia",
+    "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia",
+    "Solomon Islands", "Somalia", "South Africa", "South Korea",
+    "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname",
+    "Sweden", "Switzerland", "Syria", "Tajikistan", "Tanzania",
+    "Thailand", "Timor-Leste", "Togo", "Tonga",
+    "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan",
+    "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates",
+    "United Kingdom", "United States", "Uruguay", "Uzbekistan",
+    "Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Yemen",
+    "Zambia", "Zimbabwe",
+    "State of Palestine", "Holy See", "Taiwan",
+    "Cook Islands", "Niue", "Kosovo"
+];
+
+["exportCountry", "importCountry"].forEach(id => {
+    const select = document.getElementById(id);
+
+    countries.forEach(country => {
+        const option = document.createElement("option");
+        option.value = country;
+        option.textContent = country;
+        select.appendChild(option);
+    });
+}); 
+
+// =====================================
+// DANH SÁCH CẢNG CONTAINER QUỐC TẾ
+// =====================================
+
+const worldPorts = {
+    "Việt Nam": [
+        ["Cảng Cát Lái - Ho Chi Minh City, Vietnam", "Cát Lái - TP. Hồ Chí Minh"],
+        ["Cảng Cái Mép - Thi Vai, Vietnam", "Cái Mép - Thị Vải"],
+        ["Cảng Hải Phòng - Hai Phong, Vietnam", "Hải Phòng"],
+        ["Cảng Đà Nẵng - Da Nang, Vietnam", "Đà Nẵng"],
+        ["Cảng Quy Nhơn - Quy Nhon, Vietnam", "Quy Nhơn"],
+        ["Cảng Cửa Lò - Nghe An, Vietnam", "Cửa Lò"],
+        ["Cảng Nghi Sơn - Thanh Hoa, Vietnam", "Nghi Sơn"],
+        ["Cảng Dung Quất - Quang Ngai, Vietnam", "Dung Quất"]
+    ],
+
+    "Singapore": [
+        ["PSA Pasir Panjang - Singapore", "PSA Pasir Panjang"],
+        ["Tuas Port - Singapore", "Tuas Port"]
+    ],
+
+    "Trung Quốc": [
+        ["Shanghai - China", "Shanghai - Thượng Hải"],
+        ["Ningbo-Zhoushan - China", "Ningbo-Zhoushan"],
+        ["Shenzhen - China", "Shenzhen - Thâm Quyến"],
+        ["Yantian - Shenzhen, China", "Yantian - Thâm Quyến"],
+        ["Qingdao - China", "Qingdao - Thanh Đảo"],
+        ["Guangzhou - China", "Guangzhou - Quảng Châu"],
+        ["Tianjin - China", "Tianjin - Thiên Tân"],
+        ["Xiamen - China", "Xiamen - Hạ Môn"],
+        ["Hong Kong - China", "Hong Kong"],
+        ["Dalian - China", "Dalian - Đại Liên"],
+        ["Suzhou - China", "Suzhou - Tô Châu"],
+        ["Taicang - China", "Taicang"],
+        ["Beibu Gulf - China", "Beibu Gulf"],
+        ["Fuzhou - China", "Fuzhou - Phúc Châu"],
+        ["Dachang Bay - China", "Dachang Bay"]
+    ],
+
+    "Malaysia": [
+        ["Port Klang - Malaysia", "Port Klang"],
+        ["Tanjung Pelepas - Malaysia", "Tanjung Pelepas"],
+        ["Port of Johor - Malaysia", "Port of Johor"],
+        ["Penang Port - Malaysia", "Penang"],
+        ["Kuantan Port - Malaysia", "Kuantan"]
+    ],
+
+    "Thái Lan": [
+        ["Laem Chabang - Thailand", "Laem Chabang"],
+        ["Bangkok Port - Thailand", "Bangkok"]
+    ],
+
+    "Indonesia": [
+        ["Tanjung Priok - Indonesia", "Tanjung Priok - Jakarta"],
+        ["Tanjung Perak - Indonesia", "Tanjung Perak - Surabaya"],
+        ["Belawan - Indonesia", "Belawan"],
+        ["Makassar - Indonesia", "Makassar"]
+    ],
+
+    "Hàn Quốc": [
+        ["Busan - South Korea", "Busan - Busan"],
+        ["Incheon - South Korea", "Incheon"],
+        ["Gwangyang - South Korea", "Gwangyang"],
+        ["Ulsan - South Korea", "Ulsan"]
+    ],
+
+    "Nhật Bản": [
+        ["Tokyo - Japan", "Tokyo"],
+        ["Yokohama - Japan", "Yokohama"],
+        ["Nagoya - Japan", "Nagoya"],
+        ["Osaka - Japan", "Osaka"],
+        ["Kobe - Japan", "Kobe"],
+        ["Kawasaki - Japan", "Kawasaki"],
+        ["Hakata - Japan", "Hakata"]
+    ],
+
+    "Ấn Độ": [
+        ["Mundra - India", "Mundra"],
+        ["Jawaharlal Nehru Port - India", "JNPT / Nhava Sheva"],
+        ["Chennai - India", "Chennai"],
+        ["Kolkata - India", "Kolkata"],
+        ["Visakhapatnam - India", "Visakhapatnam"],
+        ["Cochin - India", "Cochin"],
+        ["Hazira - India", "Hazira"]
+    ],
+
+    "Nam Á": [
+        ["Colombo - Sri Lanka", "Colombo - Sri Lanka"],
+        ["Chattogram - Bangladesh", "Chattogram - Bangladesh"],
+        ["Karachi - Pakistan", "Karachi - Pakistan"],
+        ["Port Qasim - Pakistan", "Port Qasim - Pakistan"]
+    ],
+
+    "Trung Đông": [
+        ["Jebel Ali - UAE", "Jebel Ali - Dubai"],
+        ["Khalifa Port - UAE", "Khalifa Port - Abu Dhabi"],
+        ["Hamad Port - Qatar", "Hamad Port - Qatar"],
+        ["King Abdullah Port - Saudi Arabia", "King Abdullah Port"],
+        ["Jeddah Islamic Port - Saudi Arabia", "Jeddah"],
+        ["Dammam Port - Saudi Arabia", "Dammam"],
+        ["Shuwaikh Port - Kuwait", "Shuwaikh - Kuwait"],
+        ["Sohar Port - Oman", "Sohar - Oman"]
+    ],
+
+    "Châu Âu": [
+        ["Rotterdam - Netherlands", "Rotterdam - Hà Lan"],
+        ["Antwerp-Bruges - Belgium", "Antwerp-Bruges - Bỉ"],
+        ["Hamburg - Germany", "Hamburg - Đức"],
+        ["Bremen/Bremerhaven - Germany", "Bremerhaven - Đức"],
+        ["Valencia - Spain", "Valencia - Tây Ban Nha"],
+        ["Barcelona - Spain", "Barcelona - Tây Ban Nha"],
+        ["Algeciras - Spain", "Algeciras - Tây Ban Nha"],
+        ["Piraeus - Greece", "Piraeus - Hy Lạp"],
+        ["Gioia Tauro - Italy", "Gioia Tauro - Ý"],
+        ["Genoa - Italy", "Genoa - Ý"],
+        ["La Spezia - Italy", "La Spezia - Ý"],
+        ["Le Havre - France", "Le Havre - Pháp"],
+        ["Marseille-Fos - France", "Marseille-Fos - Pháp"],
+        ["Felixstowe - United Kingdom", "Felixstowe - Anh"],
+        ["Southampton - United Kingdom", "Southampton - Anh"],
+        ["Gdansk - Poland", "Gdansk - Ba Lan"],
+        ["Ambarli - Turkey", "Ambarli - Thổ Nhĩ Kỳ"],
+        ["Mersin - Turkey", "Mersin - Thổ Nhĩ Kỳ"]
+    ],
+
+    "Châu Phi": [
+        ["Tanger Med - Morocco", "Tanger Med - Morocco"],
+        ["Port Said - Egypt", "Port Said - Ai Cập"],
+        ["Alexandria - Egypt", "Alexandria - Ai Cập"],
+        ["Durban - South Africa", "Durban - Nam Phi"],
+        ["Cape Town - South Africa", "Cape Town - Nam Phi"],
+        ["Lagos - Nigeria", "Lagos - Nigeria"],
+        ["Mombasa - Kenya", "Mombasa - Kenya"],
+        ["Djibouti Port - Djibouti", "Djibouti"],
+        ["Abidjan - Ivory Coast", "Abidjan - Bờ Biển Ngà"]
+    ],
+
+    "Bắc Mỹ": [
+        ["Los Angeles - USA", "Los Angeles - Hoa Kỳ"],
+        ["Long Beach - USA", "Long Beach - Hoa Kỳ"],
+        ["New York and New Jersey - USA", "New York / New Jersey"],
+        ["Savannah - USA", "Savannah"],
+        ["Houston - USA", "Houston"],
+        ["Seattle - USA", "Seattle"],
+        ["Tacoma - USA", "Tacoma"],
+        ["Norfolk - USA", "Norfolk"],
+        ["Charleston - USA", "Charleston"],
+        ["Oakland - USA", "Oakland"],
+        ["Vancouver - Canada", "Vancouver - Canada"],
+        ["Prince Rupert - Canada", "Prince Rupert - Canada"],
+        ["Montreal - Canada", "Montreal - Canada"],
+        ["Manzanillo - Mexico", "Manzanillo - Mexico"],
+        ["Lazaro Cardenas - Mexico", "Lázaro Cárdenas - Mexico"]
+    ],
+
+    "Trung và Nam Mỹ": [
+        ["Balboa - Panama", "Balboa - Panama"],
+        ["Colon - Panama", "Colón - Panama"],
+        ["Santos - Brazil", "Santos - Brazil"],
+        ["Paranagua - Brazil", "Paranaguá - Brazil"],
+        ["Buenos Aires - Argentina", "Buenos Aires - Argentina"],
+        ["Callao - Peru", "Callao - Peru"],
+        ["San Antonio - Chile", "San Antonio - Chile"],
+        ["Cartagena - Colombia", "Cartagena - Colombia"],
+        ["Guayaquil - Ecuador", "Guayaquil - Ecuador"]
+    ],
+
+    "Châu Đại Dương": [
+        ["Sydney - Australia", "Sydney - Úc"],
+        ["Melbourne - Australia", "Melbourne - Úc"],
+        ["Brisbane - Australia", "Brisbane - Úc"],
+        ["Fremantle - Australia", "Fremantle - Úc"],
+        ["Adelaide - Australia", "Adelaide - Úc"],
+        ["Auckland - New Zealand", "Auckland - New Zealand"],
+        ["Tauranga - New Zealand", "Tauranga - New Zealand"]
+    ]
+};
+
+// Tạo danh sách chọn cho cả POL và POD
+["portOfLoading", "portOfDischarge"].forEach(id => {
+    const select = document.getElementById(id);
+
+    Object.entries(worldPorts).forEach(([region, ports]) => {
+        const group = document.createElement("optgroup");
+        group.label = region;
+
+        ports.forEach(([value, label]) => {
+            const option = document.createElement("option");
+            option.value = value;
+            option.textContent = label;
+            group.appendChild(option);
+        });
+
+        select.appendChild(group);
+    });
+});
+
+const targets = {
+    costShipment: 2490.71,
+    leadTime: 168,
+    dwellTime: 18,
+    scheduleReliability: 90,
+    utilization: 70,
+    turnaround: 186,
+    damageRate: 0.5,
+    co2: 300
+};
+
+let shipments = loadShipments();
+let currentShipment = null;
+
+function loadShipments() {
+    try {
+        const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+        return Array.isArray(data) ? data : [];
+    } catch (error) {
+        return [];
+    }
+}
+
+function saveShipments() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(shipments));
+}
+
+function getValue(id) {
+    const value = document.getElementById(id).value.trim();
+    return value === "" ? null : Number(value);
+}
+
+function getText(id) {
+    return document.getElementById(id).value.trim();
+}
+
+function fmt(value, digits = 2) {
+    if (value === null || value === undefined || !Number.isFinite(Number(value))) {
+        return "--";
+    }
+    return Number(value).toLocaleString("vi-VN", {
+        minimumFractionDigits: digits,
+        maximumFractionDigits: digits
+    });
+}
+
+function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+    })[char]);
+}
+
+function showMessage(message, type = "success") {
+    const box = document.getElementById("message");
+    box.textContent = message;
+    box.className = "message " + type;
+    box.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+function statusOf(actual, target, type) {
+    if (actual === null || actual === undefined || !Number.isFinite(Number(actual))) {
+        return { text: "Chưa có dữ liệu", className: "missing" };
+    }
+
+    const a = Number(actual);
+    const t = Number(target);
+
+    if (type === "zero") {
+        return a === 0
+            ? { text: "Đạt mục tiêu", className: "good" }
+            : { text: "Không đạt", className: "bad" };
+    }
+
+    if (type === "higher") {
+        if (a >= t) return { text: "Đạt mục tiêu", className: "good" };
+        if (a >= t * 0.9) return { text: "Cần cải thiện", className: "warning" };
+        return { text: "Không đạt", className: "bad" };
+    }
+
+    if (a <= t) return { text: "Đạt mục tiêu", className: "good" };
+    if (a <= t * 1.1) return { text: "Cần cải thiện", className: "warning" };
+    return { text: "Không đạt", className: "bad" };
+}
+
+// =====================================
+// 2. LẤY DỮ LIỆU TỪ BIỂU MẪU
+// =====================================
+
+function collectFormData() {
+    return {
+        id: Date.now().toString() + Math.random().toString(16).slice(2),
+       shipmentCode: getText("shipmentCode"),
+productName: getText("productName"),
+quantity: getValue("quantity"),
+
+exportCountry: getText("exportCountry"),
+importCountry: getText("importCountry"),
+incoterm: getText("incoterm"),
+portOfLoading: getText("portOfLoading"),
+portOfDischarge: getText("portOfDischarge"),
+finalDeliveryLocation: getText("finalDeliveryLocation"),
+
+transportMode: getText("transportMode"),
+freightForwarder: getText("freightForwarder"),
+shippingLine: getText("shippingLine"),
+roadCarrier: getText("roadCarrier"),
+vesselName: getText("vesselName"),
+voyageNumber: getText("voyageNumber"),
+containerType: getText("containerType"),
+
+etd: getText("etd") || null,
+eta: getText("eta") || null,
+actualDeparture: getText("actualDeparture") || null,
+actualArrival: getText("actualArrival") || null,
+        containers: getValue("containers"),
+        totalCost: getValue("totalCost"),
+        leadTime: getValue("leadTime"),
+        dwellTime: getValue("dwellTime"),
+        plannedDelivery: getText("plannedDelivery") || null,
+        actualDelivery: getText("actualDelivery") || null,
+        plannedMilestones: getValue("plannedMilestones"),
+        ontimeMilestones: getValue("ontimeMilestones"),
+        cargoVolume: getValue("cargoVolume"),
+        containerCapacity: getValue("containerCapacity"),
+        turnaroundTime: getValue("turnaroundTime"),
+        damagedItems: getValue("damagedItems"),
+        dndCost: getValue("dndCost"),
+        co2Emissions: getValue("co2Emissions"),
+        savedAt: new Date().toISOString()
+    };
+}
+
+function validateData(data) {
+    if (!data.shipmentCode || !data.productName) {
+        return "Vui lòng nhập mã lô hàng và tên hàng hóa.";
+    }
+
+    if (!Number.isInteger(data.quantity) || data.quantity <= 0) {
+        return "Số lượng hàng hóa phải là số nguyên lớn hơn 0.";
+    }
+
+    if (!Number.isInteger(data.containers) || data.containers <= 0) {
+        return "Số lượng container phải là số nguyên lớn hơn 0.";
+    }
+
+    const numericFields = [
+        "totalCost", "leadTime", "dwellTime", "cargoVolume",
+        "containerCapacity", "turnaroundTime", "dndCost", "co2Emissions"
+    ];
+
+    for (const field of numericFields) {
+        if (data[field] !== null &&
+            (!Number.isFinite(data[field]) || data[field] < 0)) {
+            return "Các chỉ tiêu số không được âm hoặc không hợp lệ.";
+        }
+    }
+
+    if (data.plannedMilestones !== null &&
+        (!Number.isInteger(data.plannedMilestones) || data.plannedMilestones <= 0)) {
+        return "Tổng số mốc SLA phải là số nguyên lớn hơn 0.";
+    }
+
+    if (data.ontimeMilestones !== null &&
+        (!Number.isInteger(data.ontimeMilestones) || data.ontimeMilestones < 0)) {
+        return "Số mốc đúng lịch phải là số nguyên không âm.";
+    }
+
+    if (data.plannedMilestones !== null &&
+        data.ontimeMilestones !== null &&
+        data.ontimeMilestones > data.plannedMilestones) {
+        return "Số mốc đúng lịch không được lớn hơn tổng số mốc SLA.";
+    }
+
+    if (data.damagedItems !== null &&
+        (!Number.isInteger(data.damagedItems) ||
+        data.damagedItems < 0 ||
+        data.damagedItems > data.quantity)) {
+        return "Số sản phẩm hư hỏng phải từ 0 đến tổng số lượng hàng.";
+    }
+
+    if (data.cargoVolume !== null &&
+        data.containerCapacity !== null &&
+        data.cargoVolume > data.containerCapacity) {
+        return "Thể tích hàng hóa không được lớn hơn tổng sức chứa container.";
+    }
+
+    if (data.plannedDelivery && data.actualDelivery &&
+        new Date(data.actualDelivery) < new Date("2000-01-01")) {
+        return "Thời gian giao hàng không hợp lệ.";
+    }
+
+    return null;
+}
+
+// =====================================
+// 3. TÍNH TOÁN 11 KPI
+// =====================================
+
+function calculateKPIs(data) {
+    const costPerContainer =
+        data.totalCost !== null && data.containers > 0
+        ? data.totalCost / data.containers
+        : null;
+
+    const otd =
+        data.plannedDelivery && data.actualDelivery
+        ? (new Date(data.actualDelivery) <= new Date(data.plannedDelivery) ? 100 : 0)
+        : null;
+
+    const scheduleReliability =
+        data.plannedMilestones > 0 && data.ontimeMilestones !== null
+        ? data.ontimeMilestones / data.plannedMilestones * 100
+        : null;
+
+    const utilization =
+        data.cargoVolume !== null &&
+        data.containerCapacity !== null &&
+        data.containerCapacity > 0
+        ? data.cargoVolume / data.containerCapacity * 100
+        : null;
+
+    const damageRate =
+        data.damagedItems !== null && data.quantity > 0
+        ? data.damagedItems / data.quantity * 100
+        : null;
+
+    return [
+        {
+            name: "Cost per Shipment",
+            actual: data.totalCost,
+            target: targets.costShipment,
+            unit: "USD",
+            type: "lower"
+        },
+        {
+            name: "Cost per Container",
+            actual: costPerContainer,
+            target: targets.costShipment / Math.max(data.containers, 1),
+            unit: "USD/container",
+            type: "lower"
+        },
+        {
+            name: "Lead Time",
+            actual: data.leadTime,
+            target: targets.leadTime,
+            unit: "giờ",
+            type: "lower"
+        },
+        {
+            name: "Dwell Time",
+            actual: data.dwellTime,
+            target: targets.dwellTime,
+            unit: "giờ",
+            type: "lower"
+        },
+        {
+            name: "On-Time Delivery",
+            actual: otd,
+            target: 100,
+            unit: "%",
+            type: "higher"
+        },
+        {
+            name: "Schedule Reliability",
+            actual: scheduleReliability,
+            target: targets.scheduleReliability,
+            unit: "%",
+            type: "higher"
+        },
+        {
+            name: "Container Utilization",
+            actual: utilization,
+            target: targets.utilization,
+            unit: "%",
+            type: "higher"
+        },
+        {
+            name: "Container Turnaround Time",
+            actual: data.turnaroundTime,
+            target: targets.turnaround,
+            unit: "giờ",
+            type: "lower"
+        },
+        {
+            name: "Damage Rate",
+            actual: damageRate,
+            target: targets.damageRate,
+            unit: "%",
+            type: "lower"
+        },
+        {
+            name: "D&D Cost",
+            actual: data.dndCost,
+            target: 0,
+            unit: "USD",
+            type: "zero"
+        },
+        {
+            name: "CO2 Emissions",
+            actual: data.co2Emissions,
+            target: targets.co2,
+            unit: "kg CO2e",
+            type: "lower"
+        }
+    ].map(kpi => ({
+        ...kpi,
+        status: statusOf(kpi.actual, kpi.target, kpi.type)
+    }));
+}
+
+// =====================================
+// 4. HIỂN THỊ DASHBOARD VÀ BẢNG KPI
+// =====================================
+
+function renderDashboard(data) {
+    document.getElementById("totalShipments").textContent = shipments.length;
+   document.getElementById("dashboardTotalCost").textContent =
+    data && data.totalCost !== null ? fmt(data.totalCost) : "--";
+    document.getElementById("totalContainers").textContent =
+        data ? data.containers : "--";
+}
+
+function renderKPI(data) {
+    const tbody = document.getElementById("kpiTable");
+
+    if (!data) {
+        tbody.innerHTML = '<tr><td colspan="6">Chưa có dữ liệu. Hãy nhập lô hàng.</td></tr>';
+        document.getElementById("selectedShipment").textContent = "Chưa có lô hàng được chọn.";
+        document.getElementById("goodCount").textContent = "0";
+        document.getElementById("warningCount").textContent = "0";
+        document.getElementById("badCount").textContent = "0";
+        document.getElementById("missingCount").textContent = "11";
+        document.getElementById("statusChart").innerHTML = "Chưa có dữ liệu để hiển thị.";
+        document.getElementById("analysisList").innerHTML = "Chưa có dữ liệu để phân tích.";
+        document.getElementById("comparisonChart").innerHTML = "Chưa có dữ liệu.";
+        return;
+    }
+
+    const kpis = calculateKPIs(data);
+
+    document.getElementById("selectedShipment").textContent =
+        "Đang phân tích lô hàng: " + data.shipmentCode;
+
+    let counts = { good: 0, warning: 0, bad: 0, missing: 0 };
+
+    tbody.innerHTML = kpis.map((kpi, index) => {
+        const cls = kpi.status.className;
+        counts[cls]++;
+
+        return `
+            <tr>
+                <td>${index + 1}</td>
+                <td><strong>${escapeHTML(kpi.name)}</strong></td>
+                <td>${fmt(kpi.actual)}</td>
+                <td>${fmt(kpi.target)}</td>
+                <td>${escapeHTML(kpi.unit)}</td>
+                <td><span class="status ${cls}">${kpi.status.text}</span></td>
+            </tr>
+        `;
+    }).join("");
+
+    document.getElementById("goodCount").textContent = counts.good;
+    document.getElementById("warningCount").textContent = counts.warning;
+    document.getElementById("badCount").textContent = counts.bad;
+    document.getElementById("missingCount").textContent = counts.missing;
+
+    renderStatusChart(counts);
+    renderAnalysis(kpis);
+    renderComparison(kpis);
+}
+
+function renderStatusChart(counts) {
+    const total = counts.good + counts.warning + counts.bad + counts.missing;
+
+    const parts = [
+        { label: "Đạt mục tiêu", value: counts.good, color: "#249768" },
+        { label: "Cần cải thiện", value: counts.warning, color: "#e5a52b" },
+        { label: "Không đạt", value: counts.bad, color: "#d44949" },
+        { label: "Chưa có dữ liệu", value: counts.missing, color: "#aeb8c4" }
+    ];
+
+    const chart = document.getElementById("statusChart");
+
+    chart.className = "";
+    chart.innerHTML = `
+        <div style="display:flex;flex-wrap:wrap;gap:13px;margin-bottom:18px">
+            ${parts.map(p => `
+                <span style="font-size:11px;color:#64748b">
+                    <span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${p.color};margin-right:5px"></span>
+                    ${p.label}: <strong>${p.value}</strong>
+                </span>
+            `).join("")}
+        </div>
+        <div style="height:18px;background:#edf1f5;border-radius:20px;overflow:hidden;display:flex">
+            ${parts.map(p => `
+                <div style="width:${total ? p.value / total * 100 : 0}%;background:${p.color}"></div>
+            `).join("")}
+        </div>
+        <p style="font-size:11px;color:#8995a4;margin-top:12px">
+            Tổng số chỉ số: ${total}
+        </p>
+    `;
+}
+
+
+function renderAnalysis(kpis) {
+    const list = document.getElementById("analysisList");
+
+    if (!kpis || !kpis.length) {
+        list.className = "empty";
+        list.textContent = "Chưa có dữ liệu để phân tích.";
+        return;
+    }
+
+    list.className = "analysis-list";
+
+    list.innerHTML = kpis.map((k, index) => {
+        const statusClass = k.status.className;
+
+        let recommendation = "";
+
+        if (statusClass === "good") {
+            recommendation = "Đạt mục tiêu đề ra.";
+        } else if (statusClass === "warning") {
+            recommendation = "Cần tiếp tục theo dõi và cải thiện.";
+        } else if (statusClass === "bad") {
+            recommendation = "Cần xem xét nguyên nhân và đưa ra giải pháp khắc phục.";
+        } else {
+            recommendation = "Chưa đủ dữ liệu để đánh giá chỉ tiêu này.";
+        }
+
+        return `
+            <div class="analysis-item ${
+                statusClass === "warning" ? "warning-item" : ""
+            }">
+                <strong>
+                    ${index + 1}. ${escapeHTML(k.name)}
+                    - ${k.status.text}
+                </strong>
+                <span>
+                    Thực tế: ${fmt(k.actual)} ${escapeHTML(k.unit)}.
+                    Mục tiêu: ${fmt(k.target)} ${escapeHTML(k.unit)}.
+                    ${recommendation}
+                </span>
+            </div>
+        `;
+    }).join("");
+}
+
+function renderComparison(kpis) {
+    const chart = document.getElementById("comparisonChart");
+    chart.className = "chart-list";
+
+    chart.innerHTML = kpis.map(k => {
+        let ratio = null;
+
+        if (k.actual !== null) {
+            if (k.type === "higher") {
+                ratio = k.target > 0 ? k.actual / k.target * 100 : null;
+            } else if (k.type === "zero") {
+                ratio = k.actual === 0 ? 100 : 0;
+            } else {
+                ratio = k.actual > 0 ? k.target / k.actual * 100 : 100;
+            }
+        }
+
+        const width = ratio === null ? 0 : Math.max(0, Math.min(ratio, 100));
+        const cls = k.status.className;
+
+        return `
+            <div class="chart-row">
+                <div class="chart-name">${escapeHTML(k.name)}</div>
+                <div class="track">
+                    <div class="bar ${cls}" style="width:${width}%"></div>
+                </div>
+                <div class="chart-value">${ratio === null ? "--" : fmt(ratio, 1) + "%"}</div>
+            </div>
+        `;
+    }).join("");
+}
+
+// =====================================
+// HIỂN THỊ THÔNG TIN TUYẾN VẬN CHUYỂN
+// =====================================
+
+function renderRoute(data) {
+    const routeSteps = document.getElementById("routeSteps");
+    const routeMode = document.getElementById("routeMode");
+    const routeCarriers = document.getElementById("routeCarriers");
+    const routeCargoInfo = document.getElementById("routeCargoInfo");
+    const routeSubtitle = document.getElementById("routeSubtitle");
+
+    if (!data) {
+        routeMode.textContent = "Chưa xác định phương thức vận tải.";
+        routeSteps.innerHTML =
+            '<div class="empty">Chưa có thông tin tuyến vận chuyển.</div>';
+        routeCarriers.innerHTML =
+            '<div class="empty">Chưa có thông tin đơn vị vận chuyển.</div>';
+        routeCargoInfo.textContent = "Chưa có thông tin lô hàng.";
+        routeSubtitle.textContent =
+            "Thông tin được cập nhật theo lô hàng đang nhập hoặc đang xem.";
+        return;
+    }
+
+    const show = value => value
+        ? escapeHTML(value)
+        : "Chưa cập nhật";
+
+    const dateFormat = value => {
+        if (!value) return "Chưa cập nhật";
+
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return "Chưa cập nhật";
+
+        return date.toLocaleString("vi-VN");
+    };
+
+    routeSubtitle.textContent = data.shipmentCode
+        ? "Đang hiển thị tuyến của lô hàng: " + data.shipmentCode
+        : "Thông tin tuyến vận chuyển đang được nhập.";
+
+    routeMode.textContent =
+        "Phương thức vận tải: " + (data.transportMode || "Chưa cập nhật");
+
+    const steps = [
+        {
+            letter: "A",
+            title: "Điểm xuất phát",
+            location: data.portOfLoading,
+            detail: "Quốc gia xuất khẩu: " + (data.exportCountry || "Chưa cập nhật")
+        },
+        {
+            letter: "B",
+            title: "Cảng nhập (POD)",
+            location: data.portOfDischarge,
+            detail: "Quốc gia nhập khẩu: " + (data.importCountry || "Chưa cập nhật")
+        },
+        {
+            letter: "C",
+            title: "Địa điểm giao hàng cuối cùng",
+            location: data.finalDeliveryLocation,
+            detail: "Điều kiện giao hàng: " + (data.incoterm || "Chưa cập nhật")
+        }
+    ];
+
+    routeSteps.innerHTML = steps.map((step, index) => `
+        ${index > 0 ? '<div class="route-connector">↓ Tiếp tục hành trình</div>' : ""}
+        <div class="route-step">
+            <div class="route-letter">${step.letter}</div>
+            <div>
+                <strong>${step.title}</strong>
+                <small>${show(step.location)}</small>
+                <small>${escapeHTML(step.detail)}</small>
+            </div>
+        </div>
+    `).join("");
+
+    routeCarriers.innerHTML = `
+        <div class="route-step">
+            <div class="route-letter">1</div>
+            <div>
+                <strong>Đơn vị giao nhận / Forwarder</strong>
+                <small>${show(data.freightForwarder)}</small>
+            </div>
+        </div>
+
+        <div class="route-step">
+            <div class="route-letter">2</div>
+            <div>
+                <strong>Đơn vị vận tải đường bộ</strong>
+                <small>${show(data.roadCarrier)}</small>
+            </div>
+        </div>
+
+        <div class="route-step">
+            <div class="route-letter">3</div>
+            <div>
+                <strong>Hãng tàu / Shipping Line</strong>
+                <small>${show(data.shippingLine)}</small>
+                <small>Tàu: ${show(data.vesselName)} | Voyage: ${show(data.voyageNumber)}</small>
+            </div>
+        </div>
+
+        <div class="route-step">
+            <div class="route-letter">4</div>
+            <div>
+                <strong>Container</strong>
+                <small>${data.containers ?? "Chưa cập nhật"} container - ${show(data.containerType)}</small>
+            </div>
+        </div>
+
+        <div class="route-step">
+            <div class="route-letter">5</div>
+            <div>
+                <strong>Lịch trình dự kiến</strong>
+                <small>ETD: ${dateFormat(data.etd)}</small>
+                <small>ETA: ${dateFormat(data.eta)}</small>
+            </div>
+        </div>
+
+        <div class="route-step">
+            <div class="route-letter">6</div>
+            <div>
+                <strong>Lịch trình thực tế</strong>
+                <small>Khởi hành: ${dateFormat(data.actualDeparture)}</small>
+                <small>Đến nơi: ${dateFormat(data.actualArrival)}</small>
+            </div>
+        </div>
+    `;
+
+    routeCargoInfo.innerHTML = `
+        <strong>Thông tin lô hàng</strong><br>
+        Mã lô hàng: ${show(data.shipmentCode)}<br>
+        Hàng hóa: ${show(data.productName)}<br>
+        Số lượng: ${data.quantity ?? "Chưa cập nhật"} sản phẩm<br>
+        Số container: ${data.containers ?? "Chưa cập nhật"}<br>
+        Loại container: ${show(data.containerType)}
+    `;
+}
+
+// =====================================
+// 5. LỊCH SỬ VÀ CHỌN LÔ HÀNG
+// =====================================
+
+function renderHistory() {
+    const tbody = document.getElementById("historyTable");
+
+    if (!shipments.length) {
+        tbody.innerHTML = '<tr><td colspan="11">Chưa có lô hàng nào được lưu.</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = shipments.map((s, index) => `
+        <tr>
+            <td>${index + 1}</td>
+            <td><strong>${escapeHTML(s.shipmentCode)}</strong></td>
+            <td>${escapeHTML(s.productName)}</td>
+<td>
+    ${escapeHTML(s.portOfLoading || "--")}
+    →
+    ${escapeHTML(s.portOfDischarge || "--")}
+</td>
+<td>${escapeHTML(s.transportMode || "--")}</td>
+<td>${escapeHTML(s.shippingLine || "--")}</td>
+<td>${fmt(s.quantity, 0)}</td>
+<td>${fmt(s.containers, 0)}</td>
+<td>${fmt(s.totalCost)}</td>
+            <td>${new Date(s.savedAt).toLocaleString("vi-VN")}</td>
+            <td>
+                <div class="history-actions">
+                    <button class="small-btn" type="button" data-view="${escapeHTML(s.id)}">Xem</button>
+                    <button class="small-btn delete" type="button" data-delete="${escapeHTML(s.id)}">Xóa</button>
+                </div>
+            </td>
+        </tr>
+    `).join("");
+
+    tbody.querySelectorAll("[data-view]").forEach(button => {
+        button.addEventListener("click", () => {
+            const item = shipments.find(s => s.id === button.dataset.view);
+            if (item) selectShipment(item);
+        });
+    });
+
+    tbody.querySelectorAll("[data-delete]").forEach(button => {
+        button.addEventListener("click", () => {
+            deleteShipment(button.dataset.delete);
+        });
+    });
+}
+
+function selectShipment(data) {
+    currentShipment = data;
+    renderDashboard(data);
+    renderKPI(data);
+
+    document.getElementById("overview").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+}
+
+function deleteShipment(id) {
+    if (!confirm("Bạn có chắc muốn xóa lô hàng này?")) return;
+
+    shipments = shipments.filter(s => s.id !== id);
+
+    if (currentShipment && currentShipment.id === id) {
+        currentShipment = shipments[0] || null;
+    }
+
+    saveShipments();
+    renderAll();
+}
+
+function renderAll() {
+    if (!currentShipment && shipments.length) {
+        currentShipment = shipments[0];
+    }
+
+    renderDashboard(currentShipment);
+    renderKPI(currentShipment);
+    renderHistory();
+    renderRoute(currentShipment);
+}
+
+// =====================================
+// 6. LƯU LÔ HÀNG
+// =====================================
+
+document.getElementById("shipmentForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const data = collectFormData();
+    const error = validateData(data);
+
+    if (error) {
+        showMessage(error, "error");
+        return;
+    }
+
+    try {
+        shipments.unshift(data);
+        currentShipment = data;
+        saveShipments();
+        renderAll();
+
+        showMessage("Đã lưu lô hàng và cập nhật kết quả 11 KPI.", "success");
+
+        document.getElementById("kpi").scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    } catch (error) {
+        shipments.shift();
+        showMessage("Không thể lưu dữ liệu. Có thể bộ nhớ trình duyệt đã đầy.", "error");
+    }
+});
+
+// =====================================
+// 7. NẠP DỮ LIỆU MẪU
+// =====================================
+
+document.getElementById("sampleButton").addEventListener("click", function() {
+    const sample = {
+        shipmentCode: "DHL-SG-001",
+productName: "Bosch Series 2 HBF134EB0K",
+quantity: 324,
+
+exportCountry: "Việt Nam",
+importCountry: "Singapore",
+incoterm: "CPT",
+portOfLoading: "Cảng Cát Lái - Ho Chi Minh City, Vietnam",
+portOfDischarge: "PSA Pasir Panjang - Singapore",
+finalDeliveryLocation: "Kho người mua, Singapore",
+
+transportMode: "Đường bộ + Đường biển",
+freightForwarder: "DHL Global Forwarding",
+shippingLine: "Ocean Network Express (ONE)",
+roadCarrier: "Door to Door Việt",
+vesselName: "INCRES",
+voyageNumber: "084S",
+containerType: "40GP",
+
+etd: "2026-11-13T00:00",
+eta: "2026-11-16T00:00",
+actualDeparture: "",
+actualArrival: "",
+
+containers: 2,
+        totalCost: 2490.71,
+        leadTime: 151,
+        dwellTime: 27.5,
+        plannedDelivery: "2026-11-17T18:00",
+        actualDelivery: "2026-11-17T16:00",
+        plannedMilestones: 4,
+        ontimeMilestones: 3,
+        cargoVolume: 98.88,
+        containerCapacity: 133.80,
+        turnaroundTime: 191,
+        damagedItems: 0,
+        dndCost: 0,
+        co2Emissions: 278.7
+    };
+
+    Object.entries(sample).forEach(([key, value]) => {
+        const element = document.getElementById(key);
+        if (element) element.value = value;
+    });
+
+    showMessage("Đã nạp dữ liệu minh họa. Nhấn Lưu lô hàng và tính KPI để lưu vào lịch sử.", "success");
+});
+
+// =====================================
+// 8. LÀM TRỐNG BIỂU MẪU
+// =====================================
+
+document.getElementById("clearFormButton").addEventListener("click", function() {
+    if (!confirm("Bạn muốn làm trống biểu mẫu nhập liệu?")) return;
+
+    document.getElementById("shipmentForm").reset();
+    document.getElementById("message").className = "message";
+});
+
+// =====================================
+// 9. XÓA TOÀN BỘ LỊCH SỬ
+// =====================================
+
+document.getElementById("deleteAllButton").addEventListener("click", function() {
+    if (!shipments.length) {
+        alert("Lịch sử hiện chưa có dữ liệu.");
+        return;
+    }
+
+    if (!confirm("Bạn có chắc muốn xóa toàn bộ lịch sử lô hàng? Thao tác này không thể hoàn tác.")) {
+        return;
+    }
+
+    shipments = [];
+    currentShipment = null;
+    saveShipments();
+    renderAll();
+});
+
+// =====================================
+// 10. KHỞI TẠO WEBSITE
+// =====================================
+
+renderAll();
+
+</script>
+</body>
+</html>
